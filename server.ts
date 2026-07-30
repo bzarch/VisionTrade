@@ -13,8 +13,14 @@ import { calculateConfluence } from './lib/indicators/confluence';
 import { runUnifiedAISignal } from './lib/ai-agents/unified-agent';
 import { DataSource, AssetCategory } from './src/types';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const getDirname = () => {
+  if (typeof __dirname !== 'undefined') return __dirname;
+  if (typeof import.meta !== 'undefined' && import.meta.url) {
+    return path.dirname(fileURLToPath(import.meta.url));
+  }
+  return process.cwd();
+};
+const currentDirname = getDirname();
 
 const app = express();
 app.use(express.json());
