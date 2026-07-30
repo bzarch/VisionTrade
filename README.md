@@ -55,8 +55,8 @@ Platform analisis pasar keuangan dan agregator data *real-time* berbasis **AI & 
 
 ### 1. Clone Repository
 ```bash
-git clone https://github.com/username/repository-name.git
-cd repository-name
+git clone https://github.com/bzarch/VisionTrade
+cd VisionTrade
 ```
 
 ### 2. Install Dependensi
