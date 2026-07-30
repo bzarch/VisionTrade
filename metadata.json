@@ -1,0 +1,6 @@
+{
+  "name": "VisionTrade Pro",
+  "description": "Multi-asset trading dashboard & AI market analysis with Apple Vision Pro Spatial UI and Gemini 3.6 Flash.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
