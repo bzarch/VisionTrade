@@ -13,30 +13,10 @@
 
 ---
 
-## 🔗 Repository GitHub & Quick Push
+## 🔗 Repository & GitHub Integration
 
 * **GitHub Repository**: [https://github.com/bzarch/VisionTrade](https://github.com/bzarch/VisionTrade)
-
-### 📌 Langkah Push Kode ke Repository GitHub Anda:
-```bash
-# 1. Inisialisasi git repository (jika belum)
-git init
-
-# 2. Tambahkan seluruh file ke staging area
-git add .
-
-# 3. Buat commit pertama
-git commit -m "feat: release VisionTrade Pro - institutional market engine & AI analytics"
-
-# 4. Atur branch utama ke main
-git branch -M main
-
-# 5. Hubungkan ke remote repository
-git remote add origin https://github.com/bzarch/VisionTrade.git
-
-# 6. Push kode ke GitHub (Gunakan --force jika repository remote baru diinisialisasi)
-git push -u origin main --force
-```
+* **Automatic Sync**: Project ini terhubung langsung via integrasi GitHub bawaan Google AI Studio, sehingga setiap pembaruan kode dan rilis fitur terbaru disinkronkan secara otomatis ke repository target.
 
 ---
 
