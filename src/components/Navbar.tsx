@@ -9,7 +9,9 @@ import {
   BarChart2,
   PieChart,
   Newspaper,
-  Globe
+  Globe,
+  Bell,
+  Filter
 } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -151,6 +153,28 @@ export const Navbar: React.FC = () => {
             >
               <Newspaper className="w-3.5 h-3.5" />
               <span>Berita</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('screener')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all whitespace-nowrap ${
+                activeTab === 'screener'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-lg shadow-cyan-500/10'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]'
+              }`}
+            >
+              <Filter className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Screener</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('alerts')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all whitespace-nowrap ${
+                activeTab === 'alerts'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shadow-lg shadow-cyan-500/10'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.05]'
+              }`}
+            >
+              <Bell className="w-3.5 h-3.5 text-amber-400" />
+              <span>Alerts & FX</span>
             </button>
           </nav>
         </div>

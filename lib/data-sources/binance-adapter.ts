@@ -73,7 +73,7 @@ export class BinanceAdapter implements DataAdapter {
       }>;
 
       const assets: Asset[] = [];
-      const nowStr = new Date().toLocaleTimeString();
+      const nowStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
       for (const item of this.supportedSymbols) {
         const raw = data.find(d => d.symbol === item.symbol);

@@ -5,6 +5,7 @@ import { GoogleGenAI } from '@google/genai';
 import { factory } from './lib/data-sources/factory';
 import { NewsAdapter } from './lib/data-sources/newsapi-adapter';
 import { WorldBankAdapter } from './lib/data-sources/worldbank-adapter';
+import { CalendarAdapter } from './lib/data-sources/calendar-adapter';
 import { calculateRSI } from './lib/indicators/rsi';
 import { calculateMACD } from './lib/indicators/macd';
 import { calculateSMA } from './lib/indicators/sma';
@@ -28,6 +29,7 @@ app.use(express.json());
 const PORT = 3000;
 const newsAdapter = new NewsAdapter();
 const worldBankAdapter = new WorldBankAdapter();
+const calendarAdapter = new CalendarAdapter();
 
 // In-memory cache for insights
 const insightsCache = new Map<string, { insights: string[]; timestamp: number }>();
@@ -275,6 +277,16 @@ app.get('/api/macro', async (req, res) => {
   try {
     const macroData = await worldBankAdapter.getMacroData();
     res.json({ status: 'success', data: macroData });
+  } catch (err) {
+    res.status(500).json({ status: 'error', message: (err as Error).message });
+  }
+});
+
+// 9. Economic Calendar Endpoint
+app.get('/api/calendar', async (req, res) => {
+  try {
+    const calendarEvents = await calendarAdapter.getLatestCalendar();
+    res.json({ status: 'success', data: calendarEvents, updatedAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) });
   } catch (err) {
     res.status(500).json({ status: 'error', message: (err as Error).message });
   }

@@ -18,6 +18,8 @@ import { MicroAnalysisPanel } from './components/MicroAnalysisPanel';
 import { RiskCalculator } from './components/RiskCalculator';
 import { MarketHeatmap } from './components/MarketHeatmap';
 import { EconomicCalendar } from './components/EconomicCalendar';
+import { MarketScreener } from './components/MarketScreener';
+import { PriceAlertsAndFXMatrix } from './components/PriceAlertsAndFXMatrix';
 import { AIChatbot } from './components/AIChatbot';
 import { DisclaimerFooter } from './components/DisclaimerFooter';
 
@@ -25,11 +27,11 @@ export function App() {
   const { fetchMarketData, activeTab } = useMarketStore();
 
   useEffect(() => {
-    fetchMarketData();
-    // Auto refresh market prices every 15 seconds
+    fetchMarketData(false);
+    // Silent live background auto-refresh every 8 seconds
     const timer = setInterval(() => {
-      fetchMarketData();
-    }, 15000);
+      fetchMarketData(true);
+    }, 8000);
     return () => clearInterval(timer);
   }, []);
 
@@ -121,6 +123,14 @@ export function App() {
 
         {activeTab === 'news' && (
           <NewsFeed />
+        )}
+
+        {activeTab === 'screener' && (
+          <MarketScreener />
+        )}
+
+        {activeTab === 'alerts' && (
+          <PriceAlertsAndFXMatrix />
         )}
 
       </main>

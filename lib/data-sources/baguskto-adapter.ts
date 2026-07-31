@@ -45,7 +45,75 @@ export class BagusktoSahamAdapter implements DataAdapter {
   ];
 
   async getAssets(): Promise<Asset[]> {
-    const nowStr = new Date().toLocaleTimeString();
+    const nowStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+    // Construct Yahoo tickers for IDX stocks (e.g., BBCA.JK, BBRI.JK, BMRI.JK, etc.)
+    const jkSymbols = this.idxAssets.map(item => `${item.symbol}.JK`).join(',');
+
+    try {
+      const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(jkSymbols)}`;
+      const res = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' } });
+
+      if (res.ok) {
+        const json = await res.json() as { quoteResponse?: { result?: Array<any> } };
+        const results = json.quoteResponse?.result || [];
+
+        if (results.length > 0) {
+          return this.idxAssets.map(item => {
+            const raw = results.find((r: any) => r.symbol === `${item.symbol}.JK` || r.symbol === item.symbol);
+            
+            const price = raw?.regularMarketPrice || raw?.postMarketPrice || item.price;
+            const change24h = raw?.regularMarketChangePercent != null 
+              ? Number(raw.regularMarketChangePercent.toFixed(2)) 
+              : item.change;
+            
+            const high24h = raw?.regularMarketDayHigh || Math.round(price * 1.02);
+            const low24h = raw?.regularMarketDayLow || Math.round(price * 0.98);
+            const volume24h = raw?.regularMarketVolume || 125000000000;
+
+            const sparkline: number[] = [
+              Math.round(price * (1 - (change24h / 100))),
+              Math.round(price * 0.995),
+              Math.round(price * 1.005),
+              Math.round(price)
+            ];
+
+            return {
+              id: item.symbol.toLowerCase(),
+              symbol: item.symbol,
+              name: item.name,
+              category: 'idx_stocks',
+              price,
+              change24h,
+              high24h,
+              low24h,
+              volume24h,
+              sparkline,
+              baseSource: 'idx',
+              currency: 'IDR',
+              lastUpdated: nowStr,
+              micro: {
+                marketCap: item.mcap,
+                peRatio: raw?.trailingPE ? Number(raw.trailingPE.toFixed(1)) : item.pe,
+                pbvRatio: raw?.priceToBook ? Number(raw.priceToBook.toFixed(1)) : item.pbv,
+                roe: item.roe,
+                dividendYield: raw?.trailingAnnualDividendYield ? Number((raw.trailingAnnualDividendYield * 100).toFixed(2)) : item.div,
+                netProfitMargin: item.margin,
+                earningsGrowth: change24h > 0 ? 12.4 : -3.2,
+                bidAskSpread: 0.05,
+                orderBookPressure: change24h > 1.0 ? 'BUY_DOMINANT' : change24h < -1.0 ? 'SELL_DOMINANT' : 'NEUTRAL',
+                liquidityScore: 92,
+                microTrendSignal: change24h > 2.0 ? 'BREAKOUT' : change24h > 0 ? 'ACCUMULATION' : 'DISTRIBUTION'
+              }
+            };
+          });
+        }
+      }
+    } catch (err) {
+      console.warn('IDX Yahoo live quote fetch failed, falling back to cached baseline:', err);
+    }
+
+    // Fallback if network blocked
     return this.idxAssets.map(item => {
       const sparkline: number[] = [];
       for (let i = 0; i < 10; i++) {

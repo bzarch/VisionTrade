@@ -61,7 +61,7 @@ export class ForexAdapter implements DataAdapter {
       // Fallback
     }
 
-    const nowStr = new Date().toLocaleTimeString();
+    const nowStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     return this.forexPairs.map(p => {
       const sparkline: number[] = [];
       for (let i = 0; i < 8; i++) {

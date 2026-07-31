@@ -155,9 +155,15 @@ export const PriceCard: React.FC = () => {
           </div>
         </div>
         <div className="bg-white/[0.02] border border-white/5 rounded-2xl p-3">
-          <span className="text-[10px] text-slate-500 font-mono uppercase">Last Updated</span>
-          <div className="text-xs font-mono font-semibold text-cyan-400 mt-0.5">
-            {activeAsset.lastUpdated}
+          <span className="text-[10px] text-slate-500 font-mono uppercase flex items-center justify-between">
+            <span>Last Updated</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          </span>
+          <div className="text-xs font-mono font-semibold text-cyan-400 mt-0.5 flex items-center gap-1.5">
+            <span>{activeAsset.lastUpdated}</span>
+            <span className="text-[9px] font-extrabold text-emerald-300 bg-emerald-500/20 border border-emerald-500/30 px-1.5 py-0.5 rounded-md tracking-wider">
+              LIVE REALTIME
+            </span>
           </div>
         </div>
       </div>

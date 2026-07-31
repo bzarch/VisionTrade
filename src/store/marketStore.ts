@@ -33,16 +33,16 @@ interface MarketStoreState {
   isAiLoading: boolean;
   isDataLoading: boolean;
   searchQuery: string;
-  activeTab: 'overview' | 'grid' | 'portfolio' | 'news' | 'calculator' | 'heatmap' | 'calendar';
+  activeTab: 'overview' | 'grid' | 'portfolio' | 'news' | 'calculator' | 'heatmap' | 'calendar' | 'screener' | 'alerts';
 
   setCategory: (category: AssetCategory) => void;
   setSource: (source: DataSource) => void;
   setActiveAsset: (asset: Asset) => void;
   setTimeframe: (tf: string) => void;
   setSearchQuery: (q: string) => void;
-  setActiveTab: (tab: 'overview' | 'grid' | 'portfolio' | 'news' | 'calculator' | 'heatmap' | 'calendar') => void;
+  setActiveTab: (tab: 'overview' | 'grid' | 'portfolio' | 'news' | 'calculator' | 'heatmap' | 'calendar' | 'screener' | 'alerts') => void;
 
-  fetchMarketData: () => Promise<void>;
+  fetchMarketData: (isSilent?: boolean) => Promise<void>;
   fetchKlinesAndIndicators: (symbol: string) => Promise<void>;
   fetchAISignal: (symbol: string, price: number) => Promise<void>;
   fetchAIInsights: (symbol: string) => Promise<void>;
@@ -148,28 +148,45 @@ export const useMarketStore = create<MarketStoreState>((set, get) => ({
   setSearchQuery: (q) => set({ searchQuery: q }),
   setActiveTab: (tab) => set({ activeTab: tab }),
 
-  fetchMarketData: async () => {
-    set({ isDataLoading: true });
+  fetchMarketData: async (isSilent = false) => {
+    if (!isSilent) set({ isDataLoading: true });
     try {
-      const { activeSource } = get();
+      const { activeSource, alerts } = get();
       const res = await fetch(`/api/market?source=${activeSource}`);
       const json = await res.json();
       if (json.status === 'success' && Array.isArray(json.data) && json.data.length > 0) {
         set({ assets: json.data });
-        if (!get().activeAsset) {
+        
+        const currentActive = get().activeAsset;
+        if (!currentActive) {
           get().setActiveAsset(json.data[0]);
         } else {
-          // Update current active asset price
-          const updatedActive = json.data.find((a: Asset) => a.symbol === get().activeAsset?.symbol || a.id === get().activeAsset?.id);
+          // Update current active asset price seamlessly
+          const updatedActive = json.data.find((a: Asset) => a.symbol === currentActive.symbol || a.id === currentActive.id);
           if (updatedActive) {
-            set({ activeAsset: updatedActive });
+            set({ activeAsset: { ...currentActive, price: updatedActive.price, change24h: updatedActive.change24h, high24h: updatedActive.high24h, low24h: updatedActive.low24h, lastUpdated: updatedActive.lastUpdated } });
           }
+        }
+
+        // Check active price alerts against live prices
+        if (alerts.length > 0) {
+          json.data.forEach((asset: Asset) => {
+            alerts.forEach((alt) => {
+              if (alt.active && (alt.symbol === asset.symbol || alt.symbol === asset.id)) {
+                if (alt.condition === 'ABOVE' && asset.price >= alt.targetPrice) {
+                  console.log(`[ALERT TRIGGERED] ${asset.symbol} reached ${asset.price} (Above ${alt.targetPrice})`);
+                } else if (alt.condition === 'BELOW' && asset.price <= alt.targetPrice) {
+                  console.log(`[ALERT TRIGGERED] ${asset.symbol} dropped to ${asset.price} (Below ${alt.targetPrice})`);
+                }
+              }
+            });
+          });
         }
       }
     } catch (err) {
       console.error('Fetch market error:', err);
     } finally {
-      set({ isDataLoading: false });
+      if (!isSilent) set({ isDataLoading: false });
     }
   },
 
