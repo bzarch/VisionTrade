@@ -1,13 +1,28 @@
-# 📈 Institutional Financial Market Platform & AI Technical Analysis Engine
+# 📈 VisionTrade Pro - Institutional Financial Market Platform & AI Technical Analysis Engine
 
 ![Build Status](https://img.shields.io/badge/Build-Passing-emerald?style=for-the-badge&logo=github)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![React](https://img.shields.io/badge/React-18.0+-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![Vite](https://img.shields.io/badge/Vite-5.0+-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.4+-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![React](https://img.shields.io/badge/React-19.0+-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Vite](https://img.shields.io/badge/Vite-6.0+-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-4.0+-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-amber?style=for-the-badge)
 
-Platform analisis pasar keuangan dan agregator data *real-time* berbasis **AI & Quantitative Mathematical Models**. Dirancang untuk trader profesional, analis riset, dan investor institusional yang membutuhkan data riil multi-aset (*Global Stocks, IDX Stocks, Crypto, Forex, & Commodities*) tanpa simulasi atau data tiruan.
+Platform analisis pasar keuangan dan agregator data *real-time* berbasis **AI & Quantitative Mathematical Models**. Dirancang untuk trader profesional, analis riset, dan investor institusional yang membutuhkan data riil multi-aset (*Global Stocks, IDX Stocks, Crypto, Forex, & Commodities*) tanpa simulasi.
+
+---
+
+## 🚀 Repository Link
+**GitHub Repository**: [https://github.com/bzarch/VisionTrade](https://github.com/bzarch/VisionTrade)
+
+### Cara Push ke Repository GitHub:
+```bash
+git init
+git add .
+git commit -m "feat: upgrade VisionTrade Pro - full realtime market engine & analytics"
+git branch -M main
+git remote add origin https://github.com/bzarch/VisionTrade.git
+git push -u origin main --force
+```
 
 ---
 
